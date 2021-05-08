@@ -3,10 +3,7 @@ package edu.wsb.authdemo.auth;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -15,10 +12,12 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PersonController {
 
+    private final AuthorityRepository authorityRepository;
     private final PersonService personService;
     private final PersonRepository personRepository;
 
-    public PersonController(PersonService personService, PersonRepository personRepository) {
+    public PersonController(AuthorityRepository authorityRepository, PersonService personService, PersonRepository personRepository) {
+        this.authorityRepository = authorityRepository;
         this.personService = personService;
         this.personRepository = personRepository;
     }
@@ -36,7 +35,23 @@ public class PersonController {
     @Secured("ROLE_CREATE_USER")
     ModelAndView create() {
         ModelAndView modelAndView = new ModelAndView("people/create");
+        modelAndView.addObject("authorities", authorityRepository.findAll());
         modelAndView.addObject("person", new Person());
+        return modelAndView;
+    }
+
+    @GetMapping("/edit/{id}")
+    @Secured("ROLE_CREATE_USER")
+    ModelAndView edit(@PathVariable Long id) {
+        Person person = personRepository.findById(id).orElse(null);
+
+        if (person == null) {
+            return index();
+        }
+
+        ModelAndView modelAndView = new ModelAndView("people/create");
+        modelAndView.addObject("authorities", authorityRepository.findAll());
+        modelAndView.addObject(person);
         return modelAndView;
     }
 
@@ -47,6 +62,7 @@ public class PersonController {
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("people/create");
+            modelAndView.addObject("authorities", authorityRepository.findAll());
             modelAndView.addObject(person);
             return modelAndView;
         }

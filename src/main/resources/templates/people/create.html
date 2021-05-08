@@ -23,6 +23,9 @@
     </h1>
 
     <form th:action="@{/people/save}" th:object="${person}" method="post">
+
+        <input type="hidden" th:field="*{id}"/>
+
         <div class="row">
             <div class="mb-3">
                 <div>
@@ -64,6 +67,25 @@
             </div>
             <div class="mb-3">
                 <div>
+                    <label for="repeated-password">
+                        Powtórz hasło
+                    </label>
+
+                    <div>
+                        <input type="password"
+                               id="repeated-password"
+                               th:field="*{repeatedPassword}"
+                               placeholder="Hasło"
+                               th:class="'form-control ' + ${#fields.hasErrors('repeatedPassword') ? 'is-invalid' : ''}">
+
+                        <small class="text-danger"
+                               th:if="${#fields.hasErrors('repeatedPassword')}"
+                               th:errors="*{repeatedPassword}"></small>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div>
                     <label for="name">
                         Imię i nazwisko
                     </label>
@@ -81,10 +103,32 @@
                     </div>
                 </div>
             </div>
+
+            <div>
+                <h2>
+                    Uprawnienia
+                </h2>
+
+                <p th:each="auth : ${authorities}">
+                    <input type="checkbox"
+                           name="authorities"
+                           th:value="${auth.id}"
+                           th:field="*{authorities}">
+
+                    <label th:text="#{${'authority.' + auth.name}}"
+                           th:for="${#ids.prev('authorities')}"></label>
+                </p>
+            </div>
         </div>
 
         <div>
             <button type="submit" class="btn btn-primary" th:text="Zapisz"></button>
+
+            <a th:href="@{'/people/edit/' + ${person.id}}"
+               th:if="${person.id}"
+               class="btn btn-default">
+                Usuń
+            </a>
         </div>
     </form>
 </div>

@@ -36,7 +36,9 @@
         </thead>
         <tbody>
         <tr th:each="person : ${people}">
-            <td th:text="${person.id}"></td>
+            <td>
+                <a th:href="@{'/people/edit/' + ${person.id}}" th:text="${person.id}" class="btn btn-secondary"></a>
+            </td>
             <td th:text="${person.username}"></td>
             <td th:text="${person.name}"></td>
         </tr>

@@ -1,5 +1,7 @@
 package edu.wsb.authdemo.auth;
 
+import edu.wsb.authdemo.validators.UniqueUsername;
+import edu.wsb.authdemo.validators.ValidPasswords;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@ValidPasswords
+@UniqueUsername
 public class Person {
 
     @Id
@@ -25,9 +29,11 @@ public class Person {
     @Column(nullable = false, unique = true)
     String username;
 
-    @NotEmpty
     @Column(nullable = false)
     String password;
+
+    @Transient
+    String repeatedPassword;
 
     /**
      * Imię i nazwisko
