@@ -35,7 +35,11 @@
                                id="username"
                                th:field="*{username}"
                                placeholder="Nazwa użytkownika"
-                               class="form-control">
+                               th:class="'form-control ' + ${#fields.hasErrors('username') ? 'is-invalid' : ''}">
+
+                        <small class="text-danger"
+                               th:if="${#fields.hasErrors('username')}"
+                               th:errors="*{username}"></small>
                     </div>
                 </div>
             </div>
@@ -50,7 +54,11 @@
                                id="password"
                                th:field="*{password}"
                                placeholder="Hasło"
-                               class="form-control">
+                               th:class="'form-control ' + ${#fields.hasErrors('password') ? 'is-invalid' : ''}">
+
+                        <small class="text-danger"
+                               th:if="${#fields.hasErrors('password')}"
+                               th:errors="*{password}"></small>
                     </div>
                 </div>
             </div>
@@ -65,7 +73,11 @@
                                id="name"
                                th:field="*{name}"
                                placeholder="Imię i nazwisko"
-                               class="form-control">
+                               th:class="'form-control ' + ${#fields.hasErrors('name') ? 'is-invalid' : ''}">
+
+                        <small class="text-danger"
+                               th:if="${#fields.hasErrors('name')}"
+                               th:errors="*{name}"></small>
                     </div>
                 </div>
             </div>
