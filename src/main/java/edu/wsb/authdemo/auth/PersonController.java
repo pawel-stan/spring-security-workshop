@@ -29,15 +29,15 @@ public class PersonController {
         return modelAndView;
     }
 
-//    @GetMapping("/create")
-//    @Secured("ROLE_CREATE_USER")
-//    ModelAndView create() {
-//        ModelAndView modelAndView = new ModelAndView("people/create");
-//        modelAndView.addObject("person", new Person());
-//        return modelAndView;
-//    }
+    @GetMapping("/create")
+    @Secured("ROLE_CREATE_USER")
+    ModelAndView create() {
+        ModelAndView modelAndView = new ModelAndView("people/create");
+        modelAndView.addObject("person", new Person());
+        return modelAndView;
+    }
 
-    @RequestMapping("/save")
+    @PostMapping("/save")
     @Secured("ROLE_CREATE_USER")
     ModelAndView save(@ModelAttribute Person person) {
         personService.savePerson(person);
