@@ -31,11 +31,17 @@ public class PersonService {
             return;
         }
 
-        String hashedPassword = bCryptPasswordEncoder.encode(myAdminPassword);
-        Person person = new Person(myAdminUsername, hashedPassword, "Admin Admin");
+        Person person = new Person(myAdminUsername, myAdminPassword, "Admin Admin");
 
         List<Authority> authorities = (List<Authority>) authorityRepository.findAll();
         person.setAuthorities(new HashSet<>(authorities));
+
+        savePerson(person);
+    }
+
+    protected void savePerson(Person person) {
+        String hashedPassword = bCryptPasswordEncoder.encode(person.password);
+        person.setPassword(hashedPassword);
 
         personRepository.save(person);
     }
